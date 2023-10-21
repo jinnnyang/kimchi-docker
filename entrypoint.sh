@@ -7,11 +7,11 @@ fi
 
 if [ ! -f "/data/certs/wok/dhparams.pem" ]; then
     rm -rf /data/certs/kimchi/*
-    cp /data/certs/conf.template /tmp/wok.conf
-    openssl req -x509 -newkey rsa:2048 -keyout /data/certs/wok/wok-key.pem -out /data/certs/wok/wok-cert.pem -days 720 -nodes -config /tmp/wok.conf
-    openssl x509 -in /data/certs/wok/wok-cert.pem -out /data/certs/wok/dhparams.pem -outform PEM
+    openssl dhparam -out /data/certs/wok/dhparam.pem 2048
+    openssl req -nodes -newkey rsa:2048 -keyout /data/certs/wok/wok-key.pem -out /data/certs/wok/wok.csr -subj "/C=US/ST=California/L=San Francisco/O=Wok/OU=IT Department/CN=wok.local"
+    openssl x509 -signkey /data/certs/wok/wok-key.pem -in /data/certs/wok/wok.csr -req -days 730 -out /data/certs/wok/wok-cert.pem
+    cp /data/certs/wok/wok-key.pem  /etc/kimchi/kimchi-key.pem
     cp /data/certs/wok/wok-cert.pem /data/certs/kimchi/kimchi-cert.pem
-    cp /data/certs/wok/wok-key.pem /data/certs/kimchi/kimchi-key.pem
 fi
 
 rm -rf /etc/wok/* /etc/kimchi/*
