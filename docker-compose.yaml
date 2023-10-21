@@ -2,7 +2,11 @@ version: '3.1'
 services:
   kimchi:
       container_name: kimchi
-      image: dantheman213/kimchi:latest
+      image: kimchi:3.0.0
+      build:
+        context: .
+        dockerfile: Dockerfile
+
       user: 0:0
       privileged: true
       restart: always
@@ -17,12 +21,13 @@ services:
         - /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock
         - /var/lib/libvirt:/var/lib/libvirt
         - /etc/libvirt:/etc/libvirt
-        - /your-data/VM:/storage
-        - /your-data/kimchi/wok/ssl/dhparams.pem:/etc/wok/dhparams.pem:ro
-        - /your-data/kimchi/wok/ssl/wok.crt:/etc/wok/wok-cert.pem:ro
-        - /your-data/kimchi/wok/ssl/wok.key:/etc/wok/wok-key.pem:ro
-        - /your-data/kimchi/kimchi/ssl/kimchi.crt:/etc/kimchi/kimchi-cert.pem:ro
-        - /your-data/kimchi/kimchi/ssl/kimchi.key:/etc/kimchi/kimchi-key.pem:ro
+        - ./data:/data:rw
+        # - ./data/VM:/storage
+        # - /your-data/kimchi/wok/ssl/dhparams.pem:/etc/wok/dhparams.pem:ro
+        # - /your-data/kimchi/wok/ssl/wok.crt:/etc/wok/wok-cert.pem:ro
+        # - /your-data/kimchi/wok/ssl/wok.key:/etc/wok/wok-key.pem:ro
+        # - /your-data/kimchi/kimchi/ssl/kimchi.crt:/etc/kimchi/kimchi-cert.pem:ro
+        # - /your-data/kimchi/kimchi/ssl/kimchi.key:/etc/kimchi/kimchi-key.pem:ro
       environment:
         PUID: 0
         GUID: 0
